@@ -1,26 +1,95 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/*
+ * Design system: "Editorial luxury estate".
+ * Brand green + ivory paper, gold reserved for price & CTAs, red only for the launch dot.
+ * Typography: Manrope throughout. Max font-weight is 500 everywhere;
+ * hierarchy comes from size, tracking and colour — never weight.
+ */
+@theme {
+  --color-green-950: #0a2b1e;
+  --color-green-900: #0f3d2a;
+  --color-green-800: #164a33;
+  --color-green-700: #1e5b3c;
+  --color-gold-500: #f5c518;
+  --color-gold-400: #e9c46a;
+  --color-gold-300: #ffe082;
+  --color-gold-100: #f6edd2;
+  --color-red-600: #c8102e;
+  --color-ink: #14231c;
+  --color-muted: #4a5a52;
+  --color-paper: #f7f4ec;
+  --color-line: #e3dccb;
+  --color-wa: #25d366;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  --animate-pulse-once: pulse-once 1.6s ease-out 3s 2;
+  --animate-fade-up: fade-up 0.3s ease-out both;
+
+  @keyframes pulse-once {
+    0% { box-shadow: 0 0 0 0 rgb(37 211 102 / 0.55); }
+    100% { box-shadow: 0 0 0 18px rgb(37 211 102 / 0); }
+  }
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+:root {
+  --header-h: 60px;
+  --bar-h: 68px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
 }
+@media (min-width: 768px) {
+  :root { --header-h: 76px; --bar-h: 0px; }
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h) + 8px);
+  -webkit-text-size-adjust: 100%;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-weight: 400;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+/* Room for the public site's mobile sticky bottom bar. */
+.site-shell { padding-bottom: calc(var(--bar-h) + var(--safe-b)); }
+@media (min-width: 768px) {
+  .site-shell { padding-bottom: 0; }
+}
+
+/* Weight ceiling: nothing renders heavier than 500. */
+b, strong, th, legend, summary { font-weight: 500; }
+h1, h2, h3, h4 { font-weight: 500; letter-spacing: -0.025em; text-wrap: balance; }
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+:focus-visible { outline: 2px solid var(--color-gold-500); outline-offset: 3px; }
+.on-light :focus-visible { outline-color: var(--color-green-700); }
+
+/* FAB hides only while the submit button passes underneath it. */
+html[data-fab-hide="1"] .wa-fab { opacity: 0; pointer-events: none; transform: scale(0.85); }
+
+.faq summary::-webkit-details-marker { display: none; }
+.faq details[open] .faq-plus-v { transform: scaleY(0); }
+
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
