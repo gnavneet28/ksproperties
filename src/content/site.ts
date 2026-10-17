@@ -61,9 +61,10 @@ export const content = {
     heading: "Our projects",
     intro: `Plotted developments around Ahmedabad, marketed by ${brandName} as authorised channel partner. Pick a project to see plot sizes, prices and location.`,
     view: "View project",
-    from: "Starting at",
+    from: "Pre-launch from",
     eoi: "EOI",
     plots: "Plot sizes",
+    launch: "Launch price",
     by: "by",
     comingSoon: {
       title: "More projects coming soon",

@@ -63,6 +63,10 @@ export default function ProjectsPage() {
                   <p className="mt-1 text-sm text-muted">{p.status.detail}</p>
 
                   <dl className="mt-5 divide-y divide-line rounded-xl border border-line bg-paper px-4 text-[15px]">
+                    <div className="flex items-center justify-between gap-4 py-2.5">
+                      <dt className="text-muted">{t.launch}</dt>
+                      <dd className="whitespace-nowrap text-muted line-through decoration-red-500/70">{p.offer.launchPrice}</dd>
+                    </div>
                     {[
                       [t.from, `${p.offer.price}*`],
                       [t.plots, `${p.plots.map((pl) => pl.sizeShort).join(" · ")} sq. yd`],

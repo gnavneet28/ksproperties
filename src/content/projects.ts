@@ -19,9 +19,14 @@ export type Project = {
   tagline: string;
   location: { short: string; address: string; city: string; state: string; mapQuery: string; mapUrl: string };
   offer: {
+    /** Headline price: pre-launch, including the club-charge waiver (smallest plot). */
     price: string;
     priceNumeric: number;
     priceFootnote: string;
+    /** Struck-through launch price of the smallest plot. */
+    launchPrice: string;
+    /** Scarcity cap the pre-launch price is tied to, e.g. "first 300 EOIs". */
+    eoiCap: string;
     eoi: string;
     eoiShort: string;
     rate: string;
@@ -29,7 +34,8 @@ export type Project = {
     area: string;
     areaAdj: string;
   };
-  plots: { size: string; sizeShort: string; price: string }[];
+  /** One row of the pre-launch price table; `price` is the pre-launch price incl. club waiver. */
+  plots: { size: string; sizeShort: string; launchPrice: string; prelaunchPrice: string; price: string }[];
   plotSizeOptions: string[];
   images: { card: ProjectImage; feature: ProjectImage; lifestyle: ProjectImage; gallery: ProjectImage[] };
   hero: {
@@ -39,6 +45,9 @@ export type Project = {
     sizeNote: string;
     pricePrefix: string;
     price: string;
+    /** Launch price shown struck through next to the pre-launch price. */
+    priceStrike: string;
+    priceStrikeLabel: string;
     eoiBadge: string;
     primaryCta: string;
     secondaryCta: string;
@@ -60,8 +69,13 @@ export type Project = {
   pricing: {
     eyebrow: string;
     heading: string;
-    startingAt: string;
+    /** Scarcity strip above the price cards. */
+    offerBadge: string;
+    launchLabel: string;
+    prelaunchLabel: string;
+    waiverLabel: string;
     cta: string;
+    includesNote: string;
     note: string;
     stats: { value: string; label: string }[];
   };
@@ -98,9 +112,15 @@ export type Project = {
 const am = {
   name: "Arvind Metal",
   builder: "Arvind Group",
-  price: "₹36 Lakhs",
+  /** Pre-launch price incl. club waiver for the 400 sq. yd plot — the headline number. */
+  price: "₹31.30 Lakhs",
+  /** Launch price for the same plot, shown struck through. */
+  launchPrice: "₹36 Lakhs",
+  eoiCap: "first 300 EOIs",
   eoi: "₹50,000",
+  /** Launch rate per sq. yard; the pre-launch rate works out to ~₹7,825. */
   rate: "₹9,000",
+  prelaunchRate: "₹7,825",
   area: "50+ Acres",
 };
 
@@ -109,7 +129,7 @@ const arvindMetal: Project = {
   name: am.name,
   builder: am.builder,
   featured: true,
-  status: { label: "EOI open", detail: "Launch expected within 1–2 months" },
+  status: { label: "Pre-launch open", detail: `Pre-launch price for the ${am.eoiCap} only` },
   tagline: "Connected to everything that matters",
   location: {
     short: "Near Ahmedabad–Rajkot Highway",
@@ -122,8 +142,11 @@ const arvindMetal: Project = {
   },
   offer: {
     price: am.price,
-    priceNumeric: 3600000,
-    priceFootnote: "*Indicative starting price; excludes PLC and applicable government charges",
+    priceNumeric: 3130000,
+    priceFootnote:
+      "*Pre-launch price including club waiver, for the first 300 EOIs only. Includes Basic Land Rate, Development Charges, Club Charges and Maintenance; excludes PLC and applicable government charges.",
+    launchPrice: am.launchPrice,
+    eoiCap: am.eoiCap,
     eoi: am.eoi,
     eoiShort: "₹50K",
     rate: am.rate,
@@ -132,11 +155,12 @@ const arvindMetal: Project = {
     areaAdj: "50+ acre",
   },
   plots: [
-    { size: "400 Sq. Yards", sizeShort: "400", price: "₹36 Lakhs" },
-    { size: "550 Sq. Yards", sizeShort: "550", price: "₹49.50 Lakhs" },
-    { size: "800 Sq. Yards", sizeShort: "800", price: "₹72 Lakhs" },
+    { size: "400 Sq. Yards", sizeShort: "400", launchPrice: "₹36.00 Lakhs", prelaunchPrice: "₹33.05 Lakhs", price: "₹31.30 Lakhs" },
+    { size: "550 Sq. Yards", sizeShort: "550", launchPrice: "₹49.50 Lakhs", prelaunchPrice: "₹44.67 Lakhs", price: "₹42.92 Lakhs" },
+    { size: "675 Sq. Yards", sizeShort: "675", launchPrice: "₹60.75 Lakhs", prelaunchPrice: "₹54.35 Lakhs", price: "₹52.60 Lakhs" },
+    { size: "800 Sq. Yards", sizeShort: "800", launchPrice: "₹72.00 Lakhs", prelaunchPrice: "₹64.05 Lakhs", price: "₹62.30 Lakhs" },
   ],
-  plotSizeOptions: ["400 Sq. Yards", "550 Sq. Yards", "800 Sq. Yards"],
+  plotSizeOptions: ["400 Sq. Yards", "550 Sq. Yards", "675 Sq. Yards", "800 Sq. Yards"],
   images: {
     card: {
       src: "/projects/arvind-metal/clubhouse-lake.webp",
@@ -167,15 +191,17 @@ const arvindMetal: Project = {
     // H1 rendered as lead + accent; together they must match the ad headline.
     h1Lead: "400 Sq. Yards Plots in",
     h1Accent: "Ahmedabad",
-    sizeNote: `Plot sizes 400, 550 & 800 sq. yards · ${am.rate} per sq. yard · 50+ acre township`,
-    pricePrefix: "Starting at",
+    sizeNote: `Plot sizes 400, 550, 675 & 800 sq. yards · pre-launch ${am.prelaunchRate} per sq. yard (launch ${am.rate}) · 50+ acre township`,
+    pricePrefix: "Pre-launch price from",
     price: `${am.price}*`,
-    eoiBadge: `EOI window open · just ${am.eoi}`,
+    priceStrike: `${am.launchPrice}`,
+    priceStrikeLabel: "Launch price",
+    eoiBadge: `Pre-launch price for the ${am.eoiCap} · EOI just ${am.eoi}`,
     primaryCta: "Get Price Sheet on WhatsApp",
     secondaryCta: "Call Now",
     imageCaption: "Artistic impression",
     facts: [
-      { value: "₹36 L*", label: "Starting", highlight: true },
+      { value: "₹31.30 L*", label: "Pre-launch", highlight: true },
       { value: "400–800", label: "Sq. yards" },
       { value: "₹50K", label: "EOI" },
     ],
@@ -208,16 +234,20 @@ const arvindMetal: Project = {
     amenities: ["Swimming Pool", "Aqua Yoga Deck", "Children's Play Area", "Multi-purpose Court", "Box Cricket", "Outdoor Fitness Gym"],
   },
   pricing: {
-    eyebrow: "Plot sizes & starting prices",
+    eyebrow: "Pre-launch price offering",
     heading: "Choose the plot that fits you",
-    startingAt: "Starting at",
+    offerBadge: `For the ${am.eoiCap} only`,
+    launchLabel: "Launch price",
+    prelaunchLabel: "Pre-launch price",
+    waiverLabel: "Incl. club waiver",
     cta: "Get price sheet",
-    note: "Prices are indicative starting prices and exclude PLC (Preferential Location Charges) and applicable government charges.",
+    includesNote: "Above cost includes Basic Land Rate + Development Charges + Club Charges + Maintenance.",
+    note: "Prices exclude PLC (Preferential Location Charges) and applicable government charges. The pre-launch price is valid for the first 300 EOIs only.",
     stats: [
       { value: am.area, label: "Planned development" },
       { value: "2", label: "Natural ponds" },
-      { value: "₹50K", label: "EOI, open from today" },
-      { value: "1–2 mo.", label: "Expected launch" },
+      { value: "₹50K", label: "EOI for plot booking" },
+      { value: "300", label: "EOIs at pre-launch price" },
     ],
   },
   locationSection: {
@@ -246,19 +276,19 @@ const arvindMetal: Project = {
     items: [
       {
         q: "What is EOI and is it refundable?",
-        a: `An Expression of Interest (EOI) of ${am.eoi} reserves your priority ahead of the launch. The EOI window is open now. Refund terms are shared in writing before you pay, so you know exactly where you stand.`,
+        a: `An Expression of Interest (EOI) of ${am.eoi} reserves your priority ahead of the launch, and the pre-launch price is held for the ${am.eoiCap} only. Refund terms are shared in writing before you pay, so you know exactly where you stand.`,
       },
       {
-        q: "When is the project launching?",
-        a: "The launch is expected within the next 1–2 months. Register your EOI now to get priority on plot selection.",
+        q: "Why is the pre-launch price lower than the launch price?",
+        a: `Pre-launch pricing is an early-commitment offer: the first 300 EOIs get the plot below the launch rate of ${am.rate} per sq. yard, with a further waiver on club charges. Once the 300 EOIs are taken, plots are sold at launch price.`,
       },
       {
         q: "What plot sizes and prices are available?",
-        a: `400 sq. yards from ₹36 Lakhs, 550 sq. yards from ₹49.50 Lakhs and 800 sq. yards from ₹72 Lakhs (${am.rate} per sq. yard). Prices are indicative and exclude PLC and government charges.`,
+        a: `Four sizes, at pre-launch prices including the club waiver: 400 sq. yards at ₹31.30 Lakhs (launch ₹36.00 Lakhs), 550 sq. yards at ₹42.92 Lakhs (launch ₹49.50 Lakhs), 675 sq. yards at ₹52.60 Lakhs (launch ₹60.75 Lakhs) and 800 sq. yards at ₹62.30 Lakhs (launch ₹72.00 Lakhs). Prices exclude PLC and government charges.`,
       },
       {
         q: "What are additional charges?",
-        a: "Starting prices exclude Preferential Location Charges (PLC), stamp duty, registration and other applicable government charges. You'll receive the full cost sheet on call.",
+        a: "The quoted cost includes Basic Land Rate, Development Charges, Club Charges and Maintenance. It excludes Preferential Location Charges (PLC), stamp duty, registration and other applicable government charges. You'll receive the full cost sheet on call.",
       },
       {
         q: "Can I visit the site?",
@@ -269,21 +299,21 @@ const arvindMetal: Project = {
   closing: {
     eyebrow: "Arvind Metal",
     heading: "Invest Today for a Better Tomorrow",
-    text: `Plots from 400 to 800 sq. yards in a 50+ acre development near Ahmedabad, starting at ${am.price}*. The EOI window is open with just ${am.eoi}.`,
+    text: `Plots from 400 to 800 sq. yards in a 50+ acre development near Ahmedabad, at pre-launch prices from ${am.price}* instead of ${am.launchPrice}. Reserve yours with an EOI of just ${am.eoi} — the ${am.eoiCap} only.`,
     cta: "Register EOI on WhatsApp",
     orCall: "Or call us",
   },
   whatsapp: {
-    hero: `Hi, I'm interested in plots at ${am.name}, Metal Road near Ahmedabad (starting ${am.price}). Can I get the price sheet and more details?`,
-    plot: `Hi, I'm interested in the {size} plot at ${am.name} (starting {price}). Can I get the price sheet and more info on this?`,
-    eoi: `Hi, I'd like to register my EOI of ${am.eoi} for a plot at ${am.name}. Can you share the process and next steps?`,
+    hero: `Hi, I'm interested in plots at ${am.name}, Metal Road near Ahmedabad (pre-launch from ${am.price}). Can I get the price sheet and more details?`,
+    plot: `Hi, I'm interested in the {size} plot at ${am.name} (pre-launch price {price}). Can I get the price sheet and more info on this?`,
+    eoi: `Hi, I'd like to register my EOI of ${am.eoi} for a plot at ${am.name} at the pre-launch price. Can you share the process and next steps?`,
     bottomBar: `Hi, I'm checking out ${am.name} on your website. Can I get more info on plot sizes, prices and a site visit?`,
     floating: `Hi, I have a few questions about ${am.name} plots near Ahmedabad. Can you help me?`,
     thankYou: `Hi, I just enquired about ${am.name} on your website. Can you share the price sheet and site visit slots?`,
   },
   seo: {
     title: `${am.name}: 400–800 Sq. Yard Plots near Ahmedabad from ${am.price} | KS Properties`,
-    description: `${am.name} by ${am.builder}: a 50+ acre plotted development on Metal Road near Ahmedabad–Rajkot Highway. Plots of 400, 550 and 800 sq. yards from ${am.price}*. EOI open at ${am.eoi}.`,
+    description: `${am.name} by ${am.builder}: a 50+ acre plotted development on Metal Road near Ahmedabad–Rajkot Highway. Plots of 400, 550, 675 and 800 sq. yards at pre-launch prices from ${am.price}* (launch ${am.launchPrice}). EOI ${am.eoi}, for the ${am.eoiCap} only.`,
     ogImage: { src: "/projects/arvind-metal/og.jpg", alt: `${am.name} by ${am.builder}: plots near Ahmedabad from ${am.price}`, width: 1200, height: 630 },
   },
 };
@@ -294,7 +324,7 @@ export function getProject(slug: string) {
   return projects.find((p) => p.slug === slug);
 }
 
-/** WhatsApp message for a plot-size card, e.g. "…the 550 sq. yard plot at Arvind Metal (starting ₹49.50 Lakhs)…". */
+/** WhatsApp message for a plot-size card, e.g. "…the 550 sq. yard plot at Arvind Metal (pre-launch price ₹42.92 Lakhs)…". */
 export function plotWhatsappMessage(project: Project, plot: Project["plots"][number]) {
   return project.whatsapp.plot
     .replace("{size}", plot.size.toLowerCase().replace("yards", "yard"))

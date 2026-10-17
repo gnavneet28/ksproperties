@@ -148,7 +148,13 @@ export function ProjectLanding({ project, showBreadcrumb = false }: { project: P
             <div className="mt-6 hidden max-w-xl flex-wrap items-end gap-x-8 gap-y-4 border-t border-white/15 pt-6 sm:flex md:mt-8 md:pt-7">
               <div>
                 <p className="eyebrow text-white/60">{hero.pricePrefix}</p>
-                <p className="mt-2 whitespace-nowrap text-[46px] font-medium leading-none tracking-tight text-gold-500 md:text-[60px]">{hero.price}</p>
+                <p className="mt-2 flex items-baseline gap-3 whitespace-nowrap">
+                  <span className="text-[46px] font-medium leading-none tracking-tight text-gold-500 md:text-[60px]">{hero.price}</span>
+                  <span className="text-[17px] leading-none text-white/55 line-through decoration-red-500/80 decoration-2 md:text-[19px]">
+                    <span className="sr-only">{hero.priceStrikeLabel}: </span>
+                    {hero.priceStrike}
+                  </span>
+                </p>
               </div>
               <p className="inline-flex items-center gap-2.5 whitespace-nowrap rounded-full border border-gold-400/50 bg-gold-500/10 px-4 py-2.5 text-[15px] text-gold-100">
                 <CheckIcon width={16} height={16} className="text-gold-400" />
@@ -235,17 +241,30 @@ export function ProjectLanding({ project, showBreadcrumb = false }: { project: P
       <section className="bg-green-900 py-16 text-white md:py-24" aria-labelledby="pricing-h">
         <div className="mx-auto max-w-[1200px] px-4 md:px-6">
           <SectionHead id="pricing-h" eyebrow={pricing.eyebrow} title={pricing.heading} dark center />
-          <ul className="mx-auto mt-12 grid max-w-4xl gap-4 sm:grid-cols-3">
+          <p className="mx-auto mt-5 w-fit rounded-full border border-gold-400/50 bg-gold-500/10 px-4 py-2 text-center text-[13px] uppercase tracking-[0.12em] text-gold-100">
+            {pricing.offerBadge}
+          </p>
+          <ul className="mx-auto mt-10 grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {project.plots.map((plot) => (
-              <li key={plot.size} className="flex flex-col rounded-[20px] border border-gold-400/30 bg-green-950/50 p-6 text-center sm:p-4 md:p-5 lg:p-7">
+              <li key={plot.size} className="flex flex-col rounded-[20px] border border-gold-400/30 bg-green-950/50 p-6 text-center md:p-5 lg:p-6">
                 <p className="eyebrow text-gold-100">{plot.size}</p>
-                <p className="mt-6 text-sm text-white/60">{pricing.startingAt}</p>
-                <p className="mt-1 whitespace-nowrap text-[34px] font-medium leading-none tracking-tight text-gold-400 sm:text-[24px] md:text-[26px] lg:text-[32px]">
+
+                <p className="mt-5 text-[13px] text-white/50">
+                  {pricing.launchLabel}{" "}
+                  <span className="whitespace-nowrap line-through decoration-red-500/80 decoration-2">{plot.launchPrice}</span>
+                </p>
+
+                <p className="mt-3 text-[13px] text-white/60">{pricing.prelaunchLabel}</p>
+                <p className="mt-1 whitespace-nowrap text-[20px] font-medium leading-none tracking-tight text-white">{plot.prelaunchPrice}</p>
+
+                <p className="mt-5 border-t border-gold-400/25 pt-4 text-[13px] text-gold-100">{pricing.waiverLabel}</p>
+                <p className="mt-1 whitespace-nowrap text-[30px] font-medium leading-none tracking-tight text-gold-400 lg:text-[32px]">
                   {plot.price}*
                 </p>
+
                 <WhatsAppLink
                   message={plotWhatsappMessage(project, plot)}
-                  className="mt-7 inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-xl border border-white/25 px-4 text-[15px] font-medium text-white transition-colors duration-200 hover:border-gold-400 hover:bg-white/5 hover:text-gold-300"
+                  className="mt-6 inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-xl border border-white/25 px-4 text-[15px] font-medium text-white transition-colors duration-200 hover:border-gold-400 hover:bg-white/5 hover:text-gold-300"
                 >
                   <WhatsAppIcon width={18} height={18} />
                   {pricing.cta}
@@ -261,7 +280,10 @@ export function ProjectLanding({ project, showBreadcrumb = false }: { project: P
               </li>
             ))}
           </ul>
-          <p className="mx-auto mt-8 max-w-2xl text-center text-xs leading-relaxed text-white/60">{pricing.note}</p>
+          <ul className="mx-auto mt-8 max-w-2xl space-y-1.5 text-center text-xs leading-relaxed text-white/60">
+            <li>{pricing.includesNote}</li>
+            <li>{pricing.note}</li>
+          </ul>
         </div>
       </section>
 
